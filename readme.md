@@ -68,3 +68,9 @@ f => b
 The result should be an error stating that jobs can’t have circular dependencies.
 ```
 
+## To run the code(Linux)
+```
+compile the code :  javac job_sequencer.java 
+run the code : java job_sequencer
+```
+
