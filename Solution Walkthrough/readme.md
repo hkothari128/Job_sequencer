@@ -21,7 +21,9 @@ This job structure is represented as the following dependancy graph
 ```
 ![](graph.png)
 ```
-Given you’re passed an empty string (no jobs), the result should be an empty sequence.
+Each path on the graph represents a dependancy sequence. We thus need to traverse all paths and maintain a global dependancy sequence.
+The algorithm to do this is as follows:
+* Select a random job node as a path start point. It can be any node that hasnt been traversed so far.
 ```
 ```
 Given the following job structure:
