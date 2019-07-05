@@ -19,7 +19,7 @@ This job structure is represented as the following dependancy graph
 
 
 ```
-![](graph.png)
+![](graph.jpg)
 ```
 Each path on the graph represents a dependancy sequence. We thus need to traverse all paths and maintain a global dependancy sequence.
 The algorithm to do this is as follows:
@@ -33,7 +33,7 @@ The algorithm to do this is as follows:
 A dry run of this algorithm for our earlier example is shown as follows:
 
 ```
-![](graph.png)
+![](dry_run.jpg)
 
 ```
 Now consider the following job structure:
@@ -47,9 +47,9 @@ f => b
 
 The graph for this structure is as follows:
 ```
-![](graph.png)
+![](cycle.jpg)
 ```
-We can see that there is a cycle in our graph. This would cause our algorithm to fail since we wont be able to reach a terminal node. One way to check for a cycle is to see if the child node is already visited before. However, since we are randomly selecting start points, a child node being visited before could also mean that it was part of a previous traversed path as can be seen in the dry run example above when d is selected as start point.
+We can see that there is a cycle in our graph. This would cause our algorithm to fail since we wont be able to reach a terminal node. One way to check for a cycle is to see if the child node is already visited before. However, since we are randomly selecting start points, a child node being visited before could also mean that it was part of a previous traversed path as can be seen in the dry run example above when f is selected as start point.
 
 To circumvent this ambiguity, we use another temporary visited marker that marks nodes visited only during a particular path. Once the path is terminated, we unmark all temporary visited markers. This allows us to check for visited nodes during traversal of path that belong to the path. If we encounter a temporarily visited node in our path traversal, there must be a cycle.
 ```

@@ -50,11 +50,10 @@ public class Tester
 		if(!jg.add_job('e')) return false;
 		if(!jg.add_job('f')) return false;
 
-		if(!jg.add_dependency('d','a')) return false;
-		if(!jg.add_dependency('d','b')) return false;
-		if(!jg.add_dependency('b','c')) return false;
-		if(!jg.add_dependency('c','f')) return false;
-		if(!jg.add_dependency('e','b')) return false;
+		if(!jg.add_dependency('a','d')) return false;
+		if(!jg.add_dependency('c','b')) return false;
+		if(!jg.add_dependency('f','c')) return false;
+		if(!jg.add_dependency('b','e')) return false;
 
 		jg.print_graph();
 
