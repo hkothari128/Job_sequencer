@@ -44,30 +44,45 @@ class JobGraph
 		has_cycle = false;
 	}
 
-	void add_job(char name)
+	boolean add_job(char name)
 	{
 		Job job = new Job(name);
 		jobs.add(job);
 
 		// avoid duplicate naming
 		if(job_index.get(name) == null)
+		{
 			job_index.put(name,job);
-		else
-			System.out.println("This job name already exists! Please use another name.");
+			return true;
+		}
+		
+		System.out.println("This job name already exists! Please use another name.");
+		return false;
 	}
 
-	void add_dependency(char parent,char child)
+	boolean add_dependency(char parent,char child)
 	{
-		if(job_index.get(parent) == null)	
-			System.out.println("The job '" + parent +"' doesnt exists! Please create the job first");
-		else if(job_index.get(child) == null)
-			System.out.println("The job '" + child +"' doesnt exists! Please create the job first");
-		else
+		if(child == parent)
 		{
-			job_index.get(parent).children.add(job_index.get(child));
-			job_index.get(child).has_parent = true;		// mark that this job is a child of some parent
-			
+			System.out.println("Error: A job can't depend on itself!");
+			return false;
 		}
+
+		if(job_index.get(parent) == null)
+		{	
+			System.out.println("Error: The job '" + parent +"' doesnt exists! Please create the job first");
+			return false;
+		}
+		if(job_index.get(child) == null)
+		{
+			System.out.println("Error: The job '" + child +"' doesnt exists! Please create the job first");
+			return false;
+		}
+
+		
+		job_index.get(parent).children.add(job_index.get(child));
+		job_index.get(child).has_parent = true;		// mark that this job is a child of some parent
+		return true;		
 	}
 
 	void print_graph()
