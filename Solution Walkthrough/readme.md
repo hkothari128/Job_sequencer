@@ -17,7 +17,8 @@ f =>
 
 This job structure is represented as the following dependancy graph
 
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+![Image of Yaktocat]
+(https://octodex.github.com/images/yaktocat.png)
 ```
 ```
 Given you’re passed an empty string (no jobs), the result should be an empty sequence.
