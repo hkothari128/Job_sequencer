@@ -19,7 +19,7 @@ This job structure is represented as the following dependancy graph
 
 
 ```
-![](Solution%20Walkthrough/graph.png)
+![](graph.png)
 ```
 Given you’re passed an empty string (no jobs), the result should be an empty sequence.
 ```
