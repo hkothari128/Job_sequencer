@@ -18,24 +18,24 @@ class JobGraph
 	class Job
 	{
 		char name;
-		List <Job> children;
-		Job parent;						//Can be used in future processes, currently used here in verifying validity of job sequence.
+		Set <Job> children;
+		boolean has_parent;
 		boolean is_visited;				//required for sorting
 		boolean temp_is_visited;		// required to check for cycles
 
 		Job(char name)
 		{
 			this.name = name;
-			children = new LinkedList<>();
-			parent = null;							
+			children = new HashSet<>();
+			has_parent = false;
 			is_visited = false;					
 			temp_is_visited = false;			
 		}
 	}
 
 	List<Job> jobs;
-	Map <Character,Job> job_index;
-	boolean has_cycle;
+	Map <Character,Job> job_index;	// Maps jobs names to job nodes
+	boolean has_cycle;		//indicates if the job graph has a cycle
 
 	JobGraph()
 	{
@@ -49,6 +49,7 @@ class JobGraph
 		Job job = new Job(name);
 		jobs.add(job);
 
+		// avoid duplicate naming
 		if(job_index.get(name) == null)
 			job_index.put(name,job);
 		else
@@ -57,51 +58,55 @@ class JobGraph
 
 	void add_dependency(char parent,char child)
 	{
-		if(job_index.get(parent) == null)
+		if(job_index.get(parent) == null)	
 			System.out.println("The job '" + parent +"' doesnt exists! Please create the job first");
 		else if(job_index.get(child) == null)
 			System.out.println("The job '" + child +"' doesnt exists! Please create the job first");
 		else
 		{
 			job_index.get(parent).children.add(job_index.get(child));
-			job_index.get(child).parent = job_index.get(parent);
+			job_index.get(child).has_parent = true;		// mark that this job is a child of some parent
+			
 		}
 	}
 
 	void print_graph()
 	{
-		System.out.println("Job graph: " + jobs.size() + " jobs\n" );
-		System.out.println("(Job => Depends on)");
+		System.out.println("Job graph: " + jobs.size() + " jobs" );
+		System.out.println("(Job => Depends on)\n");
 		
 		for(Job job : jobs)
 		{
-			System.out.print("\n"+ job.name + " => ");
-			if(job.parent!=null)			
-				System.out.print(job.parent.name);			
+			
+			// System.out.print("\n"+ job.name + " => ");
+			if(!job.has_parent)
+				System.out.println(job.name + " => ");
+			for(Job child: job.children)			
+				System.out.println(child.name + " => " + job.name);
+
 		}
-		System.out.println("\n");
+		
 	}
 
 
 	String get_job_sequence()
 	{
 		Stack<Character> sequence = new Stack<>();
-		// boolean [] is_visited = new boolean[jobs.size()];
-		// boolean [] temp_is_visited = new boolean[jobs.size()];
 
 		for(Job j:jobs)
 		{
-			if(!j.is_visited)
+			if(!j.is_visited)		// if we have seen this job in another path before
 			{
 
 				if(!job_sequence_helper(j,sequence))					
 				{
-					this.has_cycle = true;
+					this.has_cycle = true;		//graph has cycle
 					return "Error: Graph has a cycle!";				
 				}
 			}
 		}
 
+		// resetting the visited statuses of the jobs
 		for(Job j:jobs)
 		{
 			j.is_visited = false;
@@ -109,6 +114,7 @@ class JobGraph
 		}
 
 		String seqString = "";
+		// Getting the sequence string as reverse of sequence stored
 		while(!sequence.isEmpty())
 		{
 			seqString +=  sequence.pop() + ",";
@@ -119,14 +125,14 @@ class JobGraph
 
 	boolean job_sequence_helper(Job current,Stack<Character> sequence)
 	{
-		if(current.temp_is_visited)
+		if(current.temp_is_visited)		//if we have seen this job in the same path being traversed, there is a cycle in the graph
 			return false;
 
-		if(current.is_visited)
+		if(current.is_visited)			
 			return true;
 
-		current.is_visited = true;
-		current.temp_is_visited = true;
+		current.is_visited = true;		// permanent mark, to mark that this job and its children have been considered already
+		current.temp_is_visited = true;	// temporary mark, to mark that this job has been visited in the same traversal before
 		for(Job child:current.children)
 		{
 			if(!job_sequence_helper(child,sequence))
@@ -134,8 +140,8 @@ class JobGraph
 			
 			
 		}
-		sequence.push(current.name);
-		current.temp_is_visited = false;
+		sequence.push(current.name);		//push the jobs onto the stack from child to parent order in the traversal
+		current.temp_is_visited = false;	// remove temporary mark once the current traversal concludes
 
 		return true;
 
@@ -144,12 +150,11 @@ class JobGraph
 	boolean is_sequence_valid(String seqString)
 	{
 		String sequence[] = seqString.split(",");
-		Set <Character> seen = new HashSet<>();
-		for(int i = sequence.length - 1; i>=0; i--)
+		Set <Character> seen = new HashSet<>();		//keeps a record of all jobs seen so far in the generated job sequence
+		for(int i = 0; i<sequence.length; i++)
 		{
 			Job curr = job_index.get(sequence[i].charAt(0));
-			Job p = curr.parent;
-			if( p!=null && seen.contains(p.name))
+			if(!Collections.disjoint(curr.children,seen))			//Check if a child occurs before a parent
 				return false;
 			seen.add(curr.name);
 		}
@@ -163,66 +168,28 @@ class JobGraph
 
 public class job_sequencer
 {
-
-	static Boolean test_case_0()
-	{
-		System.out.println("\n*******************Test Case 0*****************");
-		JobGraph jg = new JobGraph();
-		
-		jg.print_graph();
-
-		String seqString = jg.get_job_sequence();
-		// System.out.println(seqString);
-		if(seqString.length()==0)
-			return true;
-		return false;
-			
-		
-	}
-
-	static Boolean test_case_1()
-	{
-
-		System.out.println("\n*******************Test Case 1*****************");
-
-		JobGraph jg = new JobGraph();
-		jg.add_job('a');
-		jg.add_job('b');
-		jg.add_job('c');
-		jg.add_job('d');
-		jg.add_job('e');
-		jg.add_job('f');
-
-		jg.add_dependency('d','a');
-		jg.add_dependency('d','b');
-		jg.add_dependency('b','c');
-		jg.add_dependency('c','f');
-
-		jg.print_graph();
-
-		
-		String seqString = jg.get_job_sequence();
-		System.out.println("Job Sequence: " + seqString);
-		return jg.is_sequence_valid(seqString);
-		
-	}
 	
-
-
 	public static void main(String[] args) throws Exception {
 				
-		
-		if(test_case_0())	
+		Tester t = new Tester();
+		if(t.test_case_0())	
 			System.out.println("Status: Passed");
 		else
 			System.out.println("Status: Failed!");
 
 		
-		if(test_case_1())	
+		if(t.test_case_1())	
 			System.out.println("Status: Passed");
 		else
 			System.out.println("Status: Failed!");
 
+		if(t.test_case_2())	
+			System.out.println("Status: Passed");
+		else
+			System.out.println("Status: Failed!");
+
+		
+		
 
 	}
 }
