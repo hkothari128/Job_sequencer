@@ -54,9 +54,11 @@ We can see that there is a cycle in our graph. This would cause our algorithm to
 To circumvent this ambiguity, we use another temporary visited marker that marks nodes visited only during a particular path. Once the path is terminated, we unmark all temporary visited markers. This allows us to check for visited nodes during traversal of path that belong to the path. If we encounter a temporarily visited node in our path traversal, there must be a cycle.
 ```
 ```
-Additional things about the solution structure.
+Additional things about the codes.
 - Since the graph is modelled using adjacency lists, we refrain from using visited and temp-visited arrays, since we would then have to map each job to an index in the array, which is extra work. Instead we provide each job with its own visited and temp-visited markers to be used in the sequencing algorithm. Once the algorithm terminates these markers are reset.
 
 - There are also checks for duplicate naming or adding dependancies between nodes that do not exist.
 
 - A validity checker is implemented to check if the sequence has any child occuring before a parent.
+
+- The Tester class contains test cases. The job sequencer class dynamically invokes all these test cases so they dont have to be called explicitly. This makes adding test cases much easier without changing any code in job_sequencer file
