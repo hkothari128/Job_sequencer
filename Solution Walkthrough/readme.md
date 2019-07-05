@@ -18,7 +18,7 @@ f =>
 This job structure is represented as the following dependancy graph
 
 ![Image of Yaktocat]
-(graph.png)
+(Solution Walkthrough/graph.png)
 ```
 ```
 Given you’re passed an empty string (no jobs), the result should be an empty sequence.
