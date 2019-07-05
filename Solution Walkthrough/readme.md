@@ -2,7 +2,10 @@
 
 ```
 We can model a job structure as a directed dependancy graph. 
-Each job in our system can be modelled as a node. Each dependancy between two jobs can be modelled as a directed edge from one job to another. We call the job a that depends on another job b as the child of b. The dependancy edge can either be from parent->child(b->a) or child->parent(a->b). Since parent->child edges are more intuitive, we select that format.
+Each job in our system can be modelled as a node. 
+Each dependancy between two jobs can be modelled as a directed edge from one job to another. 
+We call the job a that depends on another job b as the child of b. 
+The dependancy edge can either be from parent->child(b->a) or child->parent(a->b). Since parent->child edges are more intuitive, we select that format.
 
 Lets take an example from the given challenge
 
@@ -49,16 +52,23 @@ The graph for this structure is as follows:
 ```
 ![](cycle.jpg)
 ```
-We can see that there is a cycle in our graph. This would cause our algorithm to fail since we wont be able to reach a terminal node. One way to check for a cycle is to see if the child node is already visited before. However, since we are randomly selecting start points, a child node being visited before could also mean that it was part of a previous traversed path as can be seen in the dry run example above when f is selected as start point.
+We can see that there is a cycle in our graph. 
+This would cause our algorithm to fail since we wont be able to reach a terminal node. 
+One way to check for a cycle is to see if the child node is already visited before. 
+However, since we are randomly selecting start points, a child node being visited before could also mean that 
+it was part of a previous traversed path as can be seen in the dry run example above when f is selected as start point.
 
 To circumvent this ambiguity, we use another temporary visited marker that marks nodes visited only during a particular path. Once the path is terminated, we unmark all temporary visited markers. This allows us to check for visited nodes during traversal of path that belong to the path. If we encounter a temporarily visited node in our path traversal, there must be a cycle.
 ```
 ```
 Additional things about the codes.
-- Since the graph is modelled using adjacency lists, we refrain from using visited and temp-visited arrays, since we would then have to map each job to an index in the array, which is extra work. Instead we provide each job with its own visited and temp-visited markers to be used in the sequencing algorithm. Once the algorithm terminates these markers are reset.
+- Since the graph is modelled using adjacency lists, we refrain from using visited and temp-visited arrays, since we would then have to map each job to an index in the array, which is extra work. 
+  Instead we provide each job with its own visited and temp-visited markers to be used in the sequencing algorithm. Once the algorithm terminates these markers are reset.
 
 - There are also checks for duplicate naming or adding dependancies between nodes that do not exist.
 
 - A validity checker is implemented to check if the sequence has any child occuring before a parent.
 
-- The Tester class contains test cases. The job sequencer class dynamically invokes all these test cases so they dont have to be called explicitly. This makes adding test cases much easier without changing any code in job_sequencer file. You can add your own test cases to this file, just be sure to follow the function formats and boolean checks properly.
+- The Tester class contains test cases. 
+  The job sequencer class dynamically invokes all these test cases so they dont have to be called explicitly. This makes adding test cases much easier without changing any code in job_sequencer file. 
+  You can add your own test cases to this file, just be sure to follow the function formats and boolean checks properly.
