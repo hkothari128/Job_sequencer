@@ -2,12 +2,12 @@ import java.io.*;
 public class Tester
 
 {
-	int num_testcases = 3;
+	int num_testcases = 6;
 	int get_num_testcases(){ return num_testcases;}
 
-	Boolean test_case_0()
+	Boolean test_case_0()	//empty graph
 	{
-		System.out.println("\n*******************Test Case 0*****************");
+		
 		JobGraph jg = new JobGraph();
 		
 		jg.print_graph();
@@ -21,11 +21,27 @@ public class Tester
 		
 	}
 
-	Boolean test_case_1()
+	Boolean test_case_1()	//simple graph
 	{
 
-		System.out.println("\n*******************Test Case 1*****************");
+		
+		JobGraph jg = new JobGraph();
+		if(!jg.add_job('a')) return false;
+		if(!jg.add_job('b')) return false;
+		if(!jg.add_job('c')) return false;		
 
+		jg.print_graph();
+		
+		String seqString = jg.get_job_sequence();
+		System.out.println("Job Sequence: " + seqString);
+		return jg.is_sequence_valid(seqString);
+		
+	}
+
+	Boolean test_case_2()	//simple graph
+	{
+
+		
 		JobGraph jg = new JobGraph();
 		if(!jg.add_job('a')) return false;
 		if(!jg.add_job('b')) return false;
@@ -49,10 +65,10 @@ public class Tester
 		
 	}
 
-	Boolean test_case_2()
+	Boolean test_case_3()	//check for cycle
 	{
 
-		System.out.println("\n*******************Test Case 2*****************");
+		
 
 		JobGraph jg = new JobGraph();
 		if(!jg.add_job('a')) return false;
@@ -81,4 +97,34 @@ public class Tester
 		return false;
 		
 	}
+
+	Boolean test_case_4()	//check for duplicate names
+	{
+
+		
+
+		JobGraph jg = new JobGraph();	
+		System.out.println("adding job a");
+		if(!jg.add_job('a')) return false;
+		System.out.println("adding job a again");
+		if(!jg.add_job('a')) return true;
+		
+		return false;
+		
+	}
+
+	Boolean test_case_5()	//check for job exists
+	{	
+
+		JobGraph jg = new JobGraph();	
+		System.out.println("adding job a");
+		if(!jg.add_job('a')) return false;
+		System.out.println("adding edge a->b");
+		if(!jg.add_dependency('a','b')) return true;
+		 
+		return false;
+		
+	}
+
+
 }

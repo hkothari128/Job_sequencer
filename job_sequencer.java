@@ -197,6 +197,8 @@ public class job_sequencer
         for(int i = 0;i<t.get_num_testcases();i++)        	
         {        	
         	Method m = cls.getDeclaredMethod(method_name + String.valueOf(i));
+        	System.out.println("\n******************* Test Case " + i + " *****************");
+
         	if((boolean)m.invoke(t))	
 				System.out.println("Status: Passed");
 			else

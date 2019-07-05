@@ -61,4 +61,4 @@ Additional things about the codes.
 
 - A validity checker is implemented to check if the sequence has any child occuring before a parent.
 
-- The Tester class contains test cases. The job sequencer class dynamically invokes all these test cases so they dont have to be called explicitly. This makes adding test cases much easier without changing any code in job_sequencer file
+- The Tester class contains test cases. The job sequencer class dynamically invokes all these test cases so they dont have to be called explicitly. This makes adding test cases much easier without changing any code in job_sequencer file. You can add your own test cases to this file, just be sure to follow the function formats and boolean checks properly.

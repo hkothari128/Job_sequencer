@@ -70,7 +70,8 @@ The result should be an error stating that jobs can’t have circular dependenci
 
 ## To run the code(Linux)
 ```
-compile the code :  javac job_sequencer.java 
+compile the tester file :  javac Tester.java 
+compile the main code file :  javac job_sequencer.java 
 run the code : java job_sequencer
 ```
 
