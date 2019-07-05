@@ -186,25 +186,23 @@ public class job_sequencer
 	
 	public static void main(String[] args) throws Exception {
 				
-		Tester t = new Tester();
-		if(t.test_case_0())	
-			System.out.println("Status: Passed");
-		else
-			System.out.println("Status: Failed!");
+		Tester t = new Tester();	// Test cases class
 
-		
-		if(t.test_case_1())	
-			System.out.println("Status: Passed");
-		else
-			System.out.println("Status: Failed!");
+		// Dynamically invoking test_cases
+		Class<?> cls = t.getClass(); 
+        System.out.println("The name of class is " + 
+                            cls.getName()); 
 
-		if(t.test_case_2())	
-			System.out.println("Status: Passed");
-		else
-			System.out.println("Status: Failed!");
-
-		
-		
+        String method_name = "test_case_";
+        for(int i = 0;i<t.get_num_testcases();i++)        	
+        {        	
+        	Method m = cls.getDeclaredMethod(method_name + String.valueOf(i));
+        	if((boolean)m.invoke(t))	
+				System.out.println("Status: Passed");
+			else
+				System.out.println("Status: Failed!");
+        }
+      			
 
 	}
 }
